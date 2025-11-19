@@ -1,0 +1,36 @@
+# EchoZero v4.2.1 - Dimension Registry
+# Central source of truth for all tensor dimensions
+
+# Core System
+N: 64  # Number of ψ nodes (lattice size)
+dt: 0.01  # Time step for ODE integration
+
+# Multimodal Input Embeddings
+text_dim: 768
+vision_dim: 512
+audio_dim: 128
+eeg_dim: 64
+
+# GRCM Dimensions
+grounding_dim: 15  # Fused multimodal representation
+frequency_dim: 8   # Harmonic frequency vector
+desire_dim: 8      # Desire vector size
+qualia_dim: 4      # Qualia channels: calm, alert, reflective, generative
+
+# Memory
+memory_dim: 128    # GRU hidden state size
+episodic_dim: 64   # Episodic memory traces
+
+# Propagator
+prop_state_dim: 6  # Proprioceptive/actuator state
+
+# Cohesion Kernel
+world_model_dim: 32
+identity_dim: 16
+scenario_dim: 24
+
+# Complex ψ State
+psi_dtype: "cfloat"  # torch.cfloat for all ψ tensors
+
+# Device
+default_device: "cuda"  # or "cpu"
