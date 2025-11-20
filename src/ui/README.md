@@ -1,10 +1,10 @@
-# EchoZero UI Dashboard
+# EchoZero UI Dashboard v4.2.1
 
-Streamlit-based web interface for real-time monitoring and visualization of EchoZero system.
+Advanced Streamlit-based web interface for real-time monitoring, visualization, and control of EchoZero system.
 
 ## Features
 
-### 📊 Real-Time Monitoring
+### 📊 Main Dashboard
 - **φ-Depth Gauge**: Consciousness metric with color-coded thresholds
 - **Coherence Gauge**: System stability indicator
 - **Drift Gauge**: State deviation tracking
@@ -13,19 +13,38 @@ Streamlit-based web interface for real-time monitoring and visualization of Echo
 - **Memory State**: Vector visualization and statistics
 - **System Metrics**: CPU, RAM, GPU utilization
 
-### 🎨 Interactive Visualizations
-- Gauge charts with thresholds
-- Time-series line plots
-- Bar charts for memory state
-- Phase and magnitude plots for ψ dynamics
-- Real-time updates (configurable interval)
+### 🕸️ Node Mesh Topology (NEW)
+- **3D Network Visualization**: Interactive 3D graph of distributed node mesh
+- **2D Network View**: Simplified 2D topology visualization
+- **Status Indicators**: Color-coded node health (healthy/degraded/suspected/failed)
+- **Regional Grouping**: Visualize nodes by geographic/logical region
+- **Connection Metrics**: Latency and bandwidth visualization
+- **Mesh Statistics**: Total nodes, connections, average latency, topology type
 
-### ⚙️ Configuration
-- Auto-refresh toggle
-- Refresh interval control (1-30 seconds)
-- API endpoint configuration
-- Display options (show/hide sections)
-- Connection status indicator
+### 🔍 Advanced Diagnostics (NEW)
+- **Multi-Mode Analysis**: Overview, Performance, Memory, Network, Logs
+- **φ-Depth History**: Time-series tracking of consciousness metric
+- **Performance Breakdown**: Component-level timing analysis
+- **Memory Distribution**: Memory usage by component with pie charts
+- **Network Diagnostics**: Endpoint latency, request rates, error rates
+- **System Logs**: Filterable, exportable log viewer
+- **Error/Warning Tracking**: Real-time issue monitoring
+- **Export Capabilities**: Download diagnostics and logs
+
+### ⚙️ System Configuration (NEW)
+- **Multi-Tab Configuration**: Organized settings for Core, GRCM, Cohesion, Memory, Qualia, Scaling, Distributed, Security, Observability
+- **Live Parameter Tuning**: Adjust all system parameters through UI
+- **Import/Export**: Configuration backup and restore (JSON/YAML)
+- **Validation**: Real-time validation of parameter changes
+- **Reset to Defaults**: One-click factory reset
+
+### 🎨 Enhanced Visualizations
+- Interactive Plotly charts with zoom, pan, hover
+- 3D network graphs with spring layout
+- Heatmaps for memory activation patterns
+- Multi-axis performance charts
+- Gauge charts with dynamic thresholds
+- Time-series with customizable windows
 
 ## Installation
 
@@ -154,6 +173,147 @@ Range: -1 to 1 for each channel
 - RAM usage (%)
 - GPU memory usage (%)
 
+## Advanced Pages
+
+### Page 1: Node Mesh Topology
+
+Interactive visualization of distributed node network:
+
+**3D View:**
+- Spring-layout network graph in 3D space
+- Color-coded nodes by status (green=healthy, yellow=degraded, orange=suspected, red=failed)
+- Edge visualization showing active connections
+- Hover for node details (ID, region, status)
+- Rotatable, zoomable 3D camera
+
+**2D View:**
+- Simplified 2D network layout
+- Easier for analyzing connection patterns
+- Less resource-intensive
+
+**Controls:**
+- View mode toggle (3D/2D)
+- Show/hide mesh metrics
+- Region filtering
+
+**Mesh Statistics:**
+- Total nodes
+- Total connections
+- Average latency
+- Topology type
+
+**Tables:**
+- Node details (ID, region, status, capabilities)
+- Connection details (source, target, latency, bandwidth, active status)
+
+### Page 2: Advanced Diagnostics
+
+Comprehensive system analysis and troubleshooting:
+
+**Diagnostic Modes:**
+
+1. **Overview**
+   - System info (version, uptime, total inferences, avg latency)
+   - φ-depth history chart with threshold lines
+   - Errors and warnings summary
+   - Quick health snapshot
+
+2. **Performance**
+   - Inference time tracking
+   - Memory usage over time
+   - Performance breakdown by component
+   - Optimization recommendations
+
+3. **Memory**
+   - Memory distribution pie chart
+   - Component-wise memory usage
+   - Memory timeline
+   - Leak detection hints
+
+4. **Network**
+   - Request/sec metrics
+   - Response time analysis
+   - Error rate tracking
+   - Endpoint-specific latency charts
+
+5. **Logs**
+   - Filterable log viewer (debug/info/warning/error)
+   - Log level filtering
+   - Exportable to CSV
+   - Real-time log streaming
+
+**Export Features:**
+- Download full diagnostics (JSON)
+- Export logs to CSV
+- Save specific analysis results
+
+### Page 3: System Configuration
+
+Complete system configuration interface:
+
+**Configuration Sections:**
+
+1. **Core** - ψ-Dynamics parameters
+   - Lattice size (N)
+   - Time step (dt)
+   - Base frequency (ω₀)
+   - Coupling strength
+   - Computation device
+
+2. **GRCM** - Module toggles
+   - Drift correction
+   - Coherence boost
+   - Phase alignment
+   - Boundary control
+
+3. **Cohesion** - Meta-cognitive targets
+   - φ-depth target
+   - Coherence target
+   - Adjustment rate
+
+4. **Memory** - Memory system
+   - Memory dimensions
+   - Retention rate
+
+5. **Qualia** - Interpretation channels
+   - Temperature
+   - Valence weight
+   - Salience threshold
+
+6. **Scaling** - Large lattice optimizations
+   - Enable sparse coupling
+   - Local connections (k_local)
+   - Long-range connections (k_long)
+   - Enable delta compression
+   - Compression quantization bits
+
+7. **Distributed** - Multi-node coordination
+   - Enable distributed mode
+   - Sync mode (full/delta/hierarchical)
+   - Heartbeat interval
+   - Failure detection φ threshold
+
+8. **Security** - Security features
+   - ψ-state encryption
+   - RBAC
+   - Audit logging
+
+9. **Observability** - Monitoring
+   - Metrics collection
+   - Distributed tracing
+   - Metrics port
+
+**Configuration Actions:**
+- **View/Edit**: Modify parameters through interactive controls
+- **Import**: Load configuration from JSON/YAML
+- **Export**: Download current configuration
+- **Reset**: Restore factory defaults
+
+**Controls:**
+- Save configuration button
+- Real-time parameter validation
+- Warning for changes requiring restart
+
 ## Customization
 
 ### Adding New Metrics
@@ -193,14 +353,14 @@ Create new Python files in `src/ui/pages/`:
 
 ```
 src/ui/
-├── dashboard.py          # Main dashboard
+├── dashboard.py              # Main dashboard (home page)
 └── pages/
-    ├── 1_Training.py     # Training metrics
-    ├── 2_Logs.py         # System logs
-    └── 3_Config.py       # Configuration
+    ├── 1_Node_Mesh.py        # Node mesh topology visualization
+    ├── 2_Diagnostics.py      # Advanced diagnostics and debugging
+    └── 3_Configuration.py    # System configuration panel
 ```
 
-Streamlit will automatically add them to the sidebar navigation.
+Streamlit will automatically add them to the sidebar navigation. Pages are numbered for ordering.
 
 ## Troubleshooting
 
