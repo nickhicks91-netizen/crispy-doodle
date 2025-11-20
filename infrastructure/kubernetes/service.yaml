@@ -1,0 +1,71 @@
+# EchoZero API Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: echozero-api
+  namespace: echozero
+  labels:
+    app: echozero
+    component: api
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9091"
+spec:
+  type: LoadBalancer
+  selector:
+    app: echozero
+    component: api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8000
+      protocol: TCP
+    - name: metrics
+      port: 9091
+      targetPort: 9091
+      protocol: TCP
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 3600
+
+---
+# Internal Service for Inter-Pod Communication
+apiVersion: v1
+kind: Service
+metadata:
+  name: echozero-api-internal
+  namespace: echozero
+  labels:
+    app: echozero
+    component: api
+spec:
+  type: ClusterIP
+  selector:
+    app: echozero
+    component: api
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+      protocol: TCP
+
+---
+# Headless Service for StatefulSet (if needed for distributed)
+apiVersion: v1
+kind: Service
+metadata:
+  name: echozero-headless
+  namespace: echozero
+  labels:
+    app: echozero
+spec:
+  type: ClusterIP
+  clusterIP: None
+  selector:
+    app: echozero
+  ports:
+    - name: psi-sync
+      port: 9092
+      targetPort: 9092
+      protocol: TCP

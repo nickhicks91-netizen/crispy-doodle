@@ -1,0 +1,141 @@
+# EchoZero v4.2.1 - Docker Compose Configuration
+# Local development and testing environment
+
+version: '3.8'
+
+services:
+  # Main EchoZero API Service
+  echozero-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: echozero:v4.2.1
+    container_name: echozero-api
+    ports:
+      - "8000:8000"
+    environment:
+      - ECHOZERO_ENV=development
+      - ECHOZERO_LOG_LEVEL=INFO
+      - ECHOZERO_N=64
+      - ECHOZERO_DEVICE=cuda  # Change to 'cpu' if no GPU
+      - ECHOZERO_RATE_LIMIT=100
+      - ECHOZERO_RATE_WINDOW=60
+    volumes:
+      - ./config:/app/config:ro
+      - ./checkpoints:/app/checkpoints
+      - ./logs:/app/logs
+      - ./data:/app/data
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - echozero-network
+
+  # Autonomy Loop Service (separate container for continuous operation)
+  echozero-autonomy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: echozero:v4.2.1
+    container_name: echozero-autonomy
+    command: ["python", "-m", "src.autonomy.loop"]
+    environment:
+      - ECHOZERO_ENV=development
+      - ECHOZERO_LOG_LEVEL=INFO
+      - ECHOZERO_N=64
+      - ECHOZERO_DEVICE=cuda
+      - ECHOZERO_AUTONOMY_DT=0.01
+      - ECHOZERO_DRIFT_THRESHOLD=0.5
+    volumes:
+      - ./config:/app/config:ro
+      - ./checkpoints:/app/checkpoints
+      - ./logs:/app/logs
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+    depends_on:
+      - echozero-api
+    networks:
+      - echozero-network
+
+  # Prometheus for metrics collection (observability)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: echozero-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infrastructure/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    restart: unless-stopped
+    networks:
+      - echozero-network
+
+  # Grafana for visualization dashboards
+  grafana:
+    image: grafana/grafana:latest
+    container_name: echozero-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=echozero
+      - GF_INSTALL_PLUGINS=grafana-clock-panel
+    volumes:
+      - ./infrastructure/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./infrastructure/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    networks:
+      - echozero-network
+
+  # Optional: Streamlit UI Dashboard
+  echozero-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: echozero:v4.2.1
+    container_name: echozero-ui
+    command: ["streamlit", "run", "src/ui/dashboard.py", "--server.port=8501", "--server.address=0.0.0.0"]
+    ports:
+      - "8501:8501"
+    environment:
+      - ECHOZERO_API_URL=http://echozero-api:8000
+    volumes:
+      - ./config:/app/config:ro
+    restart: unless-stopped
+    depends_on:
+      - echozero-api
+    networks:
+      - echozero-network
+
+networks:
+  echozero-network:
+    driver: bridge
+
+volumes:
+  prometheus-data:
+  grafana-data:

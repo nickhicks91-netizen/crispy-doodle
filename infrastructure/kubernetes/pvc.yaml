@@ -1,0 +1,32 @@
+# PersistentVolumeClaim for Checkpoints
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: echozero-checkpoints
+  namespace: echozero
+  labels:
+    app: echozero
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 50Gi
+
+---
+# PersistentVolumeClaim for Logs
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: echozero-logs
+  namespace: echozero
+  labels:
+    app: echozero
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 20Gi

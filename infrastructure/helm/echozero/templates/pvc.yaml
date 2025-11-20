@@ -1,0 +1,38 @@
+{{- if .Values.persistence.checkpoints.enabled }}
+{{- if not .Values.persistence.checkpoints.existingClaim }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "echozero.fullname" . }}-checkpoints
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "echozero.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.checkpoints.accessMode }}
+  storageClassName: {{ .Values.persistence.checkpoints.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.checkpoints.size }}
+{{- end }}
+{{- end }}
+
+---
+{{- if .Values.persistence.logs.enabled }}
+{{- if not .Values.persistence.logs.existingClaim }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "echozero.fullname" . }}-logs
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "echozero.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.logs.accessMode }}
+  storageClassName: {{ .Values.persistence.logs.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.logs.size }}
+{{- end }}
+{{- end }}

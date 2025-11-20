@@ -1,0 +1,32 @@
+# EchoZero ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: echozero-config
+  namespace: echozero
+data:
+  # Application Configuration
+  ECHOZERO_ENV: "production"
+  ECHOZERO_LOG_LEVEL: "INFO"
+  ECHOZERO_N: "64"
+  ECHOZERO_DEVICE: "cuda"
+
+  # API Configuration
+  ECHOZERO_RATE_LIMIT: "100"
+  ECHOZERO_RATE_WINDOW: "60"
+  ECHOZERO_API_HOST: "0.0.0.0"
+  ECHOZERO_API_PORT: "8000"
+
+  # Autonomy Configuration
+  ECHOZERO_AUTONOMY_DT: "0.01"
+  ECHOZERO_DRIFT_THRESHOLD: "0.5"
+  ECHOZERO_PHI_SAFE_THRESHOLD: "0.3"
+
+  # Storage Paths
+  ECHOZERO_CONFIG_PATH: "/app/config/dimensions.yaml"
+  ECHOZERO_CHECKPOINT_DIR: "/app/checkpoints"
+  ECHOZERO_LOG_DIR: "/app/logs"
+
+  # Observability
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+  PROMETHEUS_PORT: "9091"

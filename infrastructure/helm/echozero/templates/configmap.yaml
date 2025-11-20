@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "echozero.fullname" . }}-dimensions
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "echozero.labels" . | nindent 4 }}
+data:
+  dimensions.yaml: |
+    # EchoZero Dimension Registry
+    N: {{ .Values.dimensions.N }}
+    text_dim: {{ .Values.dimensions.text_dim }}
+    vision_dim: {{ .Values.dimensions.vision_dim }}
+    audio_dim: {{ .Values.dimensions.audio_dim }}
+    eeg_dim: {{ .Values.dimensions.eeg_dim }}
+    grounding_dim: {{ .Values.dimensions.grounding_dim }}
+    memory_dim: {{ .Values.dimensions.memory_dim }}
+    desires_dim: {{ .Values.dimensions.desires_dim }}
+    qualia_channels: {{ .Values.dimensions.qualia_channels }}
+    kernel_hidden: {{ .Values.dimensions.kernel_hidden }}
+    world_model_dim: {{ .Values.dimensions.world_model_dim }}
+    identity_dim: {{ .Values.dimensions.identity_dim }}

@@ -1,0 +1,27 @@
+apiVersion: v2
+name: echozero
+description: EchoZero v4.2.1 - Resonant Intelligence Middleware
+type: application
+version: 4.2.1
+appVersion: "4.2.1"
+
+keywords:
+  - echozero
+  - resonant-intelligence
+  - ai
+  - machine-learning
+  - cognitive-middleware
+
+home: https://github.com/nickhicks91-netizen/crispy-doodle
+sources:
+  - https://github.com/nickhicks91-netizen/crispy-doodle
+
+maintainers:
+  - name: EchoZero Team
+    email: echozero@example.com
+
+dependencies: []
+
+annotations:
+  category: AI/ML
+  licenses: MIT

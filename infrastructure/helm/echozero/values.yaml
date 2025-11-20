@@ -1,0 +1,202 @@
+# Default values for EchoZero Helm chart
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Global settings
+global:
+  nameOverride: ""
+  fullnameOverride: ""
+
+# Image configuration
+image:
+  repository: echozero
+  tag: "v4.2.1"
+  pullPolicy: IfNotPresent
+  # pullSecrets:
+  #   - name: regcred
+
+# API deployment configuration
+api:
+  enabled: true
+  replicaCount: 3
+
+  resources:
+    requests:
+      memory: "4Gi"
+      cpu: "2000m"
+      nvidia.com/gpu: 1
+    limits:
+      memory: "8Gi"
+      cpu: "4000m"
+      nvidia.com/gpu: 1
+
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 80
+
+  # Service configuration
+  service:
+    type: LoadBalancer
+    port: 80
+    targetPort: 8000
+    annotations: {}
+    # loadBalancerIP: ""
+
+  # Ingress configuration
+  ingress:
+    enabled: false
+    className: "nginx"
+    annotations: {}
+      # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    hosts:
+      - host: echozero.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+    #  - secretName: echozero-tls
+    #    hosts:
+    #      - echozero.example.com
+
+# Autonomy loop configuration
+autonomy:
+  enabled: true
+  replicaCount: 1
+
+  resources:
+    requests:
+      memory: "4Gi"
+      cpu: "2000m"
+      nvidia.com/gpu: 1
+    limits:
+      memory: "8Gi"
+      cpu: "4000m"
+      nvidia.com/gpu: 1
+
+# Application configuration
+config:
+  # Environment
+  environment: production
+  logLevel: INFO
+
+  # EchoZero parameters
+  N: 64
+  device: cuda
+
+  # API settings
+  rateLimit: 100
+  rateWindow: 60
+  apiHost: "0.0.0.0"
+  apiPort: 8000
+
+  # Autonomy settings
+  autonomyDt: 0.01
+  driftThreshold: 0.5
+  phiSafeThreshold: 0.3
+
+  # Observability
+  otelEndpoint: "http://otel-collector:4317"
+  prometheusPort: 9091
+
+# Dimensions configuration (from dimensions.yaml)
+dimensions:
+  N: 64
+  text_dim: 768
+  vision_dim: 512
+  audio_dim: 128
+  eeg_dim: 64
+  grounding_dim: 15
+  memory_dim: 128
+  desires_dim: 8
+  qualia_channels: 4
+  kernel_hidden: 256
+  world_model_dim: 512
+  identity_dim: 64
+
+# Persistent storage
+persistence:
+  checkpoints:
+    enabled: true
+    storageClass: "fast-ssd"
+    accessMode: ReadWriteMany
+    size: 50Gi
+    # existingClaim: ""
+
+  logs:
+    enabled: true
+    storageClass: "standard"
+    accessMode: ReadWriteMany
+    size: 20Gi
+    # existingClaim: ""
+
+# Security context
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+# Pod security context
+podSecurityContext: {}
+
+# Node selector for GPU nodes
+nodeSelector:
+  accelerator: nvidia-gpu
+
+# Tolerations for GPU taints
+tolerations:
+  - key: nvidia.com/gpu
+    operator: Exists
+    effect: NoSchedule
+
+# Affinity rules
+affinity: {}
+
+# Service account
+serviceAccount:
+  create: true
+  name: "echozero-sa"
+  annotations: {}
+
+# RBAC
+rbac:
+  create: true
+
+# Monitoring
+monitoring:
+  prometheus:
+    enabled: true
+    scrape: true
+    port: 9091
+    path: /metrics
+
+# Health checks
+healthCheck:
+  liveness:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 30
+    timeoutSeconds: 10
+    failureThreshold: 3
+  readiness:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  startup:
+    enabled: true
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    failureThreshold: 30
+
+# Pod disruption budget
+podDisruptionBudget:
+  enabled: true
+  minAvailable: 2
+
+# Network policy
+networkPolicy:
+  enabled: false

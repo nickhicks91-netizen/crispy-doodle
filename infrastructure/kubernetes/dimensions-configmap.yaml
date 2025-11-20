@@ -1,0 +1,32 @@
+# ConfigMap for dimensions.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: echozero-dimensions
+  namespace: echozero
+  labels:
+    app: echozero
+data:
+  dimensions.yaml: |
+    # EchoZero Dimension Registry
+    # Central source of truth for all tensor dimensions
+
+    # Lattice size
+    N: 64
+
+    # Input modalities
+    text_dim: 768
+    vision_dim: 512
+    audio_dim: 128
+    eeg_dim: 64
+
+    # GRCM dimensions
+    grounding_dim: 15
+    memory_dim: 128
+    desires_dim: 8
+    qualia_channels: 4
+
+    # Kernel dimensions
+    kernel_hidden: 256
+    world_model_dim: 512
+    identity_dim: 64
