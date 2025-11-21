@@ -20,14 +20,42 @@ An intelligent agent that automatically organizes your Google Docs into labeled 
 5. **Organizes** by moving files into category-based folders
 6. **Reports** detailed statistics on the organization process
 
+## Quick Start - The Easy Way! 🚀
+
+**New to setup?** Use the interactive wizard - it does everything for you:
+
+```bash
+python easy_setup.py
+```
+
+The wizard will:
+- ✅ Guide you through each step
+- ✅ Open the right websites automatically
+- ✅ Check everything works
+- ✅ Run a test for you!
+
+Takes about 10 minutes. See [QUICKSTART.md](QUICKSTART.md) for details.
+
+---
+
 ## Prerequisites
 
 - Python 3.7 or higher
 - Google Account with Google Docs
-- Anthropic API key (for Claude AI)
-- Google Cloud Project with Drive & Docs APIs enabled
+- Anthropic API key (for Claude AI - free trial available)
+- Google Cloud Project with Drive & Docs APIs enabled (free)
 
 ## Setup Instructions
+
+### Option 1: Easy Setup (Recommended)
+
+```bash
+python easy_setup.py
+```
+
+Follow the prompts! The wizard handles everything.
+
+### Option 2: Manual Setup
 
 ### 1. Install Dependencies
 
