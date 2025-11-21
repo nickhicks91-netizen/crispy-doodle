@@ -1,0 +1,23 @@
+{
+  "anthropic_api_key": "YOUR_ANTHROPIC_API_KEY_HERE",
+  "credentials_file": "credentials.json",
+  "token_file": "token.pickle",
+  "organize_root_folder": "My Drive",
+  "create_organized_folder": true,
+  "organized_folder_name": "Organized Docs",
+  "dry_run": true,
+  "max_docs_to_process": null,
+  "categories": {
+    "default": [
+      "Work",
+      "Personal",
+      "Finance",
+      "Health",
+      "Education",
+      "Projects",
+      "Notes",
+      "Miscellaneous"
+    ],
+    "custom": []
+  }
+}
