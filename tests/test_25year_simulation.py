@@ -84,17 +84,16 @@ class FullStackSimulator:
         )
 
         # PLF 2.0
-        self.plf2 = PLF2Controller(n_cohorts=n_cohorts)
+        self.plf2 = PLF2Controller()
 
         # Fracton Mode
-        self.fracton = FractonModeController(n_cohorts=n_cohorts)
+        self.fracton = FractonModeController()
 
         # Orchestrator
         orch_cfg = TorusOrchestratorConfig(
             grid_w=grid_w,
             grid_h=grid_h,
-            n_cohorts=n_cohorts,
-            rebalance_frac=0.25,  # 25% quarterly
+            shell_rebalance_frac=0.25,  # 25% quarterly
         )
         self.orchestrator = TorusCohortOrchestrator(config=orch_cfg)
 
@@ -103,7 +102,7 @@ class FullStackSimulator:
         self.drift_tracker = DriftCurveTracker(max_history=300)
         self.contribution_tracker = ContributionTracker(n_cohorts=n_cohorts)
         self.projection_viz = ProjectionVisualizer(max_history=500)
-        self.plf_metrics = PLFMetrics(n_cohorts=n_cohorts)
+        self.plf_metrics = PLFMetrics()
 
         # Fairness Layer
         self.fairness = FairnessPolicy(
@@ -185,7 +184,9 @@ class FullStackSimulator:
             state = self._build_state_dict()
 
             # PLF 1.0 damping
-            plf1_output = self.plf1.forward(state)
+            cohort_phases = state["theta"]
+            cohort_activity = np.abs(state["r"])  # Use r as activity proxy
+            plf1_output = self.plf1.step(cohort_phases, cohort_activity)
 
             # PLF 2.0 predictive stability
             plf2_state = self.plf2.step(state)
@@ -266,7 +267,10 @@ class FullStackSimulator:
         """Record all metrics for transparency."""
         # PLF Metrics
         plf1_metrics = self.plf_metrics.record_plf1(plf1_output)
-        plf2_metrics = self.plf_metrics.record_plf2(plf2_state, plf2_state)
+
+        # Compute approximate curvature for metrics
+        kappa = np.random.randn(self.n_cohorts) * 0.1  # Simplified placeholder
+        plf2_metrics = self.plf_metrics.record_plf2(plf2_state, kappa)
 
         # Compute fracton charge for metrics
         kappa = np.random.randn(self.n_cohorts) * 0.1  # Placeholder
