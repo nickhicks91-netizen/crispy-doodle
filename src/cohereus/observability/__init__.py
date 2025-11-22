@@ -3,6 +3,7 @@ CO-HERE-US Observability
 
 OTEL/Prometheus metrics for financial system monitoring:
 - Financial metrics (risk, strategy, position, liquidity, portfolio)
+- PLF & Fracton metrics (phase, curvature, charge, mobility)
 - Batched collectors for high-frequency systems
 """
 
@@ -20,6 +21,8 @@ from .financial_metrics import (
     FinancialMetricsCollector,
 )
 
+from .plf_metrics import PLFMetrics
+
 __all__ = [
     'log_risk_allocation',
     'log_risk_drift',
@@ -32,4 +35,5 @@ __all__ = [
     'log_portfolio_volatility',
     'log_account_balance',
     'FinancialMetricsCollector',
+    'PLFMetrics',
 ]
