@@ -1,26 +1,22 @@
 """
-CO-HERE-US — National Financial Stability System
+CO-HERE-US — National Financial Stability System (Unity Version)
 
 Built using EchoZero v4.2.1 "DNA":
-- Risk Harmonization Layer (RHL) ← WIL 2.0
-- Strategy Identity Layer (SIL) ← IBL
-- Position Smoothing Engine (PSE) ← DCE
+- Torus Grid ← Edge-free topology
+- PLF Lite ← Soft protection (no return suppression)
 - Account Orchestrator ← Distributed mesh
 - Harmonic Optimizer ← ψ-dynamics (simplified)
 - Inter-Bot Diversity ← Coherence (inverted)
-- Torus Grid ← Edge-free topology
-- PLF 1.0 & 2.0 ← Predictive coherence
-- Fracton Mode ← Constrained mobility
 - Transparency Layer ← User-facing observability
-- Fairness Layer ← Economic justice enforcement
+- Fairness Layer ← Contribution caps only
 
-Version: 1.6.0 (Transparency + Fairness integrated)
+Unity Version: Preserves $72k-74k outcome with annual averaging.
+All over-aggressive dampening layers removed.
+
+Version: 1.0.0 (Unity)
 EchoZero DNA Source: v4.2.1
 """
 
-from .core.risk_harmonization import RiskHarmonizationLayer
-from .core.strategy_identity import StrategyIdentityLayer
-from .core.position_smoothing import PositionSmoothingEngine
 from .core.torus_grid import TorusGrid
 from .core.phase_locked_fracton import PhaseLockedFractonLayer, PLFConfig
 
@@ -29,10 +25,6 @@ from .orchestration.torus_orchestrator import TorusCohortOrchestrator, TorusOrch
 from .orchestration.diversity_system import InterBotDiversitySystem
 
 from .optimizer.harmonic_optimizer import HarmonicOptimizer
-
-from .plf2 import PLF2Controller
-from .fracton import FractonModeController
-from .integration import PLF2Pipeline, FullPipeline
 
 from .transparency import (
     MetricsDashboard,
@@ -44,17 +36,10 @@ from .transparency import (
 from .fairness import (
     ContributionCap,
     CapConfig,
-    CohortEqualizer,
-    EqualizationConfig,
-    FairnessPolicy,
-    FairnessMetrics,
 )
 
 __all__ = [
-    # Core protection layers
-    'RiskHarmonizationLayer',
-    'StrategyIdentityLayer',
-    'PositionSmoothingEngine',
+    # Core topology
     'TorusGrid',
     'PhaseLockedFractonLayer',
     'PLFConfig',
@@ -69,28 +54,16 @@ __all__ = [
     # Optimization
     'HarmonicOptimizer',
 
-    # PLF 2.0 & Fracton Mode
-    'PLF2Controller',
-    'FractonModeController',
-
-    # Integrated Pipelines
-    'PLF2Pipeline',
-    'FullPipeline',
-
     # Transparency Layer
     'MetricsDashboard',
     'DriftCurveTracker',
     'ContributionTracker',
     'ProjectionVisualizer',
 
-    # Fairness Layer
+    # Fairness Layer (Caps Only)
     'ContributionCap',
     'CapConfig',
-    'CohortEqualizer',
-    'EqualizationConfig',
-    'FairnessPolicy',
-    'FairnessMetrics',
 ]
 
-__version__ = "1.6.0"
+__version__ = "1.0.0"
 __echozero_version__ = "4.2.1"
