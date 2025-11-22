@@ -11,8 +11,10 @@ Built using EchoZero v4.2.1 "DNA":
 - Torus Grid ← Edge-free topology
 - PLF 1.0 & 2.0 ← Predictive coherence
 - Fracton Mode ← Constrained mobility
+- Transparency Layer ← User-facing observability
+- Fairness Layer ← Economic justice enforcement
 
-Version: 1.5.0 (PLF 2.0 + Fracton Mode integrated)
+Version: 1.6.0 (Transparency + Fairness integrated)
 EchoZero DNA Source: v4.2.1
 """
 
@@ -31,6 +33,22 @@ from .optimizer.harmonic_optimizer import HarmonicOptimizer
 from .plf2 import PLF2Controller
 from .fracton import FractonModeController
 from .integration import PLF2Pipeline, FullPipeline
+
+from .transparency import (
+    MetricsDashboard,
+    DriftCurveTracker,
+    ContributionTracker,
+    ProjectionVisualizer,
+)
+
+from .fairness import (
+    ContributionCap,
+    CapConfig,
+    CohortEqualizer,
+    EqualizationConfig,
+    FairnessPolicy,
+    FairnessMetrics,
+)
 
 __all__ = [
     # Core protection layers
@@ -58,7 +76,21 @@ __all__ = [
     # Integrated Pipelines
     'PLF2Pipeline',
     'FullPipeline',
+
+    # Transparency Layer
+    'MetricsDashboard',
+    'DriftCurveTracker',
+    'ContributionTracker',
+    'ProjectionVisualizer',
+
+    # Fairness Layer
+    'ContributionCap',
+    'CapConfig',
+    'CohortEqualizer',
+    'EqualizationConfig',
+    'FairnessPolicy',
+    'FairnessMetrics',
 ]
 
-__version__ = "1.5.0"
+__version__ = "1.6.0"
 __echozero_version__ = "4.2.1"
