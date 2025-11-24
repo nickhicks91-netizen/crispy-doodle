@@ -58,20 +58,20 @@ def generate_annual_return() -> float:
     Multi-Scale Averaging (Daily → Monthly → Annual).
 
     Generates one year's return using proper multi-scale averaging.
-    This naturally smooths while preserving the expected mean.
+    This naturally smooths volatility while preserving the expected mean.
     """
-    # Daily noise (365 days)
-    daily_returns = np.random.normal(
-        EXPECTED_RETURN / 365,
-        ANNUAL_VOLATILITY / np.sqrt(365),
-        365
-    )
+    # Generate daily noise (mean=0, volatility based on daily variance)
+    daily_noise = np.random.normal(0, ANNUAL_VOLATILITY / np.sqrt(365), 365)
 
-    # Monthly averages (12 months)
-    monthly_returns = daily_returns.reshape(12, -1).mean(axis=1)
+    # Average to monthly (reduces volatility)
+    monthly_chunks = np.array_split(daily_noise, 12)
+    monthly_noise = np.array([chunk.mean() for chunk in monthly_chunks])
 
-    # Annual average (preserves mean)
-    annual_return = monthly_returns.mean()
+    # Average to annual (further reduces volatility)
+    annual_noise = monthly_noise.mean()
+
+    # Add expected return to the smoothed noise
+    annual_return = EXPECTED_RETURN + annual_noise
 
     return annual_return
 
