@@ -13,29 +13,10 @@ This tests the REAL operational model: corporate-funded pre-retirement
 plan for every newborn, running continuously at capacity.
 """
 
-import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-
 import numpy as np
 import time
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass
-
-# Import Unity Version components only
-from src.cohereus import (
-    TorusGrid,
-    PhaseLockedFractonLayer,
-    PLFConfig,
-    AccountOrchestrator,
-    TorusCohortOrchestrator,
-    TorusOrchestratorConfig,
-    ContributionCap,
-    CapConfig,
-    MetricsDashboard,
-    DriftCurveTracker,
-    ContributionTracker,
-)
 
 
 @dataclass
@@ -69,13 +50,11 @@ class UnitySteadyStateSimulator:
         self,
         births_per_year: int = 3_600_000,
         cohort_duration_years: int = 25,
-        n_torus_cohorts: int = 12,
         seed: int = 42
     ):
         """Initialize steady state simulator."""
         self.births_per_year = births_per_year
         self.cohort_duration = cohort_duration_years
-        self.n_torus_cohorts = n_torus_cohorts
         np.random.seed(seed)
 
         print(f"Initializing CO-HERE-US Unity — Steady State Equilibrium Test")
@@ -83,34 +62,6 @@ class UnitySteadyStateSimulator:
         print(f"  Births per year: {births_per_year:,}")
         print(f"  Cohort duration: {cohort_duration_years} years")
         print(f"  Steady state capacity: {births_per_year * cohort_duration_years:,} users")
-        print(f"  Torus cohorts: {n_torus_cohorts}")
-
-        # Core topology
-        self.grid = TorusGrid(width=4, height=3)
-
-        # PLF Lite (soft protection only)
-        self.plf_lite = PhaseLockedFractonLayer(
-            grid=self.grid,
-            config=PLFConfig()
-        )
-
-        # Orchestrator
-        orch_cfg = TorusOrchestratorConfig(
-            grid_w=4,
-            grid_h=3,
-            shell_rebalance_frac=0.25,
-        )
-        self.orchestrator = TorusCohortOrchestrator(config=orch_cfg)
-
-        # Transparency Layer
-        self.dashboard = MetricsDashboard()
-        self.drift_tracker = DriftCurveTracker(max_history=600)
-        self.contribution_tracker = ContributionTracker(n_cohorts=n_torus_cohorts)
-
-        # Fairness Layer (caps only)
-        self.contribution_cap = ContributionCap(
-            config=CapConfig(monthly_cap_usd=20.0)
-        )
 
         # Yearly cohorts (active and aged out)
         self.active_cohorts: List[YearlyCohort] = []
@@ -439,7 +390,6 @@ if __name__ == "__main__":
     sim = UnitySteadyStateSimulator(
         births_per_year=3_600_000,
         cohort_duration_years=25,
-        n_torus_cohorts=12,
         seed=42
     )
 
